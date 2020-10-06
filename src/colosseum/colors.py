@@ -18,6 +18,27 @@ class rgb(Color):
     def rgb(self):
         return self
 
+    @property
+    def hsl(self):
+        x_max = max(self.r, self.g, self.b)
+        x_min = min(self.r, self.g, self.b)
+        chroma = x_max - x_min
+
+        lightness = (x_max + x_min) / 2 / 255
+
+        if chroma == 0:
+            hue = 0
+        else:
+            if x_max == self.r:
+                hue = 60 * (self.g - self.b) / chroma
+            elif x_max == self.g:
+                hue = 60 * (2 + (self.b - self.r) / chroma)
+            else:
+                hue = 60 * (4 + (self.r - self.g) / chroma)
+        saturation = 0 if chroma == 0 else chroma / (255 - abs(2 * x_max - chroma - 255))
+
+        return hsl(round(hue), saturation, lightness, self.a)
+
 
 class hsl(Color):
     "A representation of an HSLA color"
@@ -56,6 +77,10 @@ class hsl(Color):
             round(b * 0xff),
             self.a
         )
+
+    @property
+    def hsl(self):
+        return self
 
 
 ALICEBLUE = 'aliceblue'
