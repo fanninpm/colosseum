@@ -14,6 +14,13 @@ class rgb(Color):
     def __repr__(self):
         return "rgba({}, {}, {}, {})".format(self.r, self.g, self.b, self.a)
 
+    def __eq__(self, other):
+        equal_r = self.r == other.rgb.r
+        equal_g = self.g == other.rgb.g
+        equal_b = self.b == other.rgb.b
+        equal_a = self.a == other.rgb.a
+        return equal_r and equal_g and equal_b and equal_a
+
     @property
     def rgb(self):
         return self
@@ -45,11 +52,18 @@ class hsl(Color):
     def __init__(self, h, s, l, a=1.0):  # noqa: E741
         self.h = h
         self.s = s
-        self.l = l  # noqa
+        self.l = l  # noqa: E741
         self.a = a
 
     def __repr__(self):
         return "hsla({}, {}, {}, {})".format(self.h, self.s, self.l, self.a)
+
+    def __eq__(self, other):
+        equal_h = self.h == other.hsl.h
+        equal_s = self.s == other.hsl.s
+        equal_l = self.l == other.hsl.l  # noqa: E741
+        equal_a = self.a == other.hsl.a
+        return equal_h and equal_s and equal_l and equal_a
 
     @property
     def rgb(self):
