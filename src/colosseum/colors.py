@@ -15,11 +15,10 @@ class rgb(Color):
         return "rgba({}, {}, {}, {})".format(self.r, self.g, self.b, self.a)
 
     def __eq__(self, other):
-        equal_r = self.r == other.rgb.r
-        equal_g = self.g == other.rgb.g
-        equal_b = self.b == other.rgb.b
-        equal_a = self.a == other.rgb.a
-        return equal_r and equal_g and equal_b and equal_a
+        if self.a == other.rgb.a == 0:  # all fully transparent colors are identical
+            return True
+        else:
+            return self.r == other.rgb.r and self.g == other.rgb.g and self.b == other.rgb.b and self.a == other.rgb.a
 
     @property
     def rgb(self):
@@ -59,11 +58,16 @@ class hsl(Color):
         return "hsla({}, {}, {}, {})".format(self.h, self.s, self.l, self.a)
 
     def __eq__(self, other):
-        equal_h = self.h == other.hsl.h
-        equal_s = self.s == other.hsl.s
-        equal_l = self.l == other.hsl.l  # noqa: E741
-        equal_a = self.a == other.hsl.a
-        return equal_h and equal_s and equal_l and equal_a
+        if self.a == other.hsl.a == 0:  # all fully transparent colors are identical
+            return True
+        else:
+            if self.s == other.hsl.s == 0:  # all fully desaturated colors have an undefined hue
+                return self.l == other.hsl.l and self.a == other.hsl.a  # noqa: E741
+            else:
+                return (self.h % 360 == other.hsl.h % 360
+                        and self.s == other.hsl.s
+                        and self.l == other.hsl.l
+                        and self.a == other.hsl.a)
 
     @property
     def rgb(self):
